@@ -5,7 +5,7 @@ use std::io::Write;
 use std::io::Stdout;
 
 
-unsafe fn print_incomming(mut stream: TcpStream) {
+fn print_incomming(mut stream: TcpStream) {
     let mut buf;
     loop {
         buf = [0; 512];
@@ -27,9 +27,7 @@ fn main() {
     for stream in listener.incoming() {
         match stream {
             Err(e) => println!("failed: {}", e),
-            Ok(stream) => unsafe {
-                print_incomming(stream);
-            },
+            Ok(stream) => print_incomming(stream),
         }
     }
 }
