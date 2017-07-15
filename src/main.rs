@@ -2,7 +2,7 @@ use std::net::{TcpListener, TcpStream};
 
 use std::io::Read;
 use std::io::Write;
-use std::io::Stdout;
+use std::io::stdout;
 
 
 fn print_incomming(mut stream: TcpStream) {
@@ -18,16 +18,24 @@ fn print_incomming(mut stream: TcpStream) {
                 m
             }
         };
-        Stdout::write(&mut std::io::stdout(), &buf);
+        match stdout().write(&buf) {
+            Err(e) => panic!("Got error while writing to stdout: {}", e),
+            Ok(s) => println!("Wrote {} bytes", s),
+        };
     }
 }
 
+
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:8888").unwrap();
-    for stream in listener.incoming() {
-        match stream {
-            Err(e) => println!("failed: {}", e),
-            Ok(stream) => print_incomming(stream),
+    match TcpListener::bind("127.0.0.1:8888") {
+        Err(e) => panic!("Error while binding to adress: {}", e),
+        Ok(l) => {
+            for stream in l.incoming() {
+                match stream {
+                    Err(e) => println!("failed: {}", e),
+                    Ok(stream) => print_incomming(stream),
+                }
+            }
         }
-    }
+    };
 }
