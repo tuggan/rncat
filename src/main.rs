@@ -1,3 +1,35 @@
+use std::net::{TcpListener, TcpStream};
+
+use std::io::Read;
+use std::io::Write;
+use std::io::Stdout;
+
+
+unsafe fn print_incomming(mut stream: TcpStream) {
+    let mut buf;
+    loop {
+        buf = [0; 512];
+        let _ = match stream.read(&mut buf) { 
+            Err(e) => panic!("Got an error {}", e),
+            Ok(m) => {
+                if m == 0 {
+                    break;
+                }
+                m
+            }
+        };
+        Stdout::write(&mut std::io::stdout(), &buf);
+    }
+}
+
 fn main() {
-    println!("Hello, world!");
+    let listener = TcpListener::bind("127.0.0.1:8888").unwrap();
+    for stream in listener.incoming() {
+        match stream {
+            Err(e) => println!("failed: {}", e),
+            Ok(stream) => unsafe {
+                print_incomming(stream);
+            },
+        }
+    }
 }
