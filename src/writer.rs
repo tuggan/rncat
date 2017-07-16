@@ -22,6 +22,9 @@ pub fn write(adress: &str, port: &str) {
                 match stdin().read(&mut buf) {
                     Err(e) => panic!("Failed while reading from stdin: {}", e),
                     Ok(s) => {
+                        if s == 0 {
+                            break;
+                        };
                         match stream.write(&buf) {
                             Err(e) => panic!("Failed while writing to stdout: {}", e),
                             Ok(s) => s,
