@@ -4,6 +4,7 @@ use getopts::Options;
 use std::env;
 
 mod listener;
+mod writer;
 
 fn print_usage(program: &str, opts: Options) {
     let brief = format!("Usage: {} FILE [options]", program);
@@ -44,6 +45,6 @@ fn main() {
     if listener {
         listener::listen(&adress, &port);
     } else {
-
+        writer::write(&adress, &port);
     }
 }

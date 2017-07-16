@@ -7,6 +7,7 @@ use std::io::stdout;
 pub fn print_incomming(mut stream: TcpStream) {
     let mut buf;
     loop {
+        // @TODO i only want to perform this operation once if possible
         buf = [0; 512];
         let _ = match stream.read(&mut buf) { 
             Err(e) => panic!("Failed to read stream: {}", e),
