@@ -33,7 +33,6 @@ fn main() {
     }
 
     if matches.opt_present("l") {
-        println!("Server mode enabled!");
         listener = true;
     }
 
